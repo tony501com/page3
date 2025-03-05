@@ -1,5 +1,5 @@
 export async function onRequest(context) {
-  const url = "https://www.google.com/";
+  const url = "https://node.freeclashnode.com/uploads/2025/03/4-20250303.txt";
 
   try {
     const response = await fetch(url, {
