@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cloudflare Pages + Workers</title>
+  </head>
+  <body>
+    <h1>Hello from Cloudflare Pages! 333</h1>
+    <button id="fetchButton">Fetch from Worker</button>
+    <p id="response"></p>
+
+    <script>
+      async function callWorker() {
+        const response = await fetch("https://page2-dxx.pages.dev");
+        const text = await response.text();
+        document.getElementById("output").textContent = text;
+      }
+    </script>
+  </body>
+</html>
