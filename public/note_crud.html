@@ -9,32 +9,32 @@
     <h1>笔记列表</h1>
     <input type="text" id="noteInput" placeholder="输入笔记">
     <button onclick="addNote()">添加</button>
-    <ul id="notesList"></ul>
+    
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>笔记</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody id="notesTable"></tbody>
+    </table>
 
     <script>
         async function fetchNotes() {
             const res = await fetch('/my_note');
             const notes = await res.json();
-            const notesList = document.getElementById('notesList');
-            notesList.innerHTML = '';
+            const notesTable = document.getElementById('notesTable');
+            notesTable.innerHTML = '';
             notes.forEach(({ id, note }) => {
-                const li = document.createElement('li');
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.value = note;
-                const button = document.createElement('button');
-                button.textContent = '修改';
-                button.onclick = async () => {
-                    await fetch('/my_note', {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ id, note: input.value })
-                    });
-                    fetchNotes();
-                };
-                li.appendChild(input);
-                li.appendChild(button);
-                notesList.appendChild(li);
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${id}</td>
+                    <td><input type="text" value="${note}" id="note-${id}"></td>
+                    <td><button onclick="updateNote(${id})">修改</button></td>
+                `;
+                notesTable.appendChild(tr);
             });
         }
 
@@ -47,6 +47,16 @@
                 body: JSON.stringify({ note })
             });
             document.getElementById('noteInput').value = '';
+            fetchNotes();
+        }
+
+        async function updateNote(id) {
+            const note = document.getElementById(`note-${id}`).value;
+            await fetch('/my_note', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, note })
+            });
             fetchNotes();
         }
 
