@@ -32,4 +32,41 @@
             const res = await fetch('/my_note');
             const notes = await res.json();
             const notesTable = document.getElementById('notesTable');
-            notesTable.innerHTML = '
+            notesTable.innerHTML = '';
+            notes.forEach(({ id, note }) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${id}</td>
+                    <td><textarea id="note-${id}" style="width: 300px; height: 60px;">${note}</textarea></td>
+                    <td><button onclick="updateNote(${id})">修改</button></td>
+                `;
+                notesTable.appendChild(tr);
+            });
+        }
+
+        async function addNote() {
+            const note = document.getElementById('noteInput').value;
+            if (!note) return;
+            await fetch('/my_note', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ note })
+            });
+            document.getElementById('noteInput').value = '';
+            fetchNotes();
+        }
+
+        async function updateNote(id) {
+            const note = document.getElementById(`note-${id}`).value;
+            await fetch('/my_note', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, note })
+            });
+            fetchNotes();
+        }
+
+        fetchNotes();
+    </script>
+</body>
+</html>
