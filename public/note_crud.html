@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>笔记管理</title>
+</head>
+<body>
+    <h1>笔记列表</h1>
+    <input type="text" id="noteInput" placeholder="输入笔记">
+    <button onclick="addNote()">添加</button>
+    <ul id="notesList"></ul>
+
+    <script>
+        async function fetchNotes() {
+            const res = await fetch('/my_note');
+            const notes = await res.json();
+            const notesList = document.getElementById('notesList');
+            notesList.innerHTML = '';
+            notes.forEach(({ id, note }) => {
+                const li = document.createElement('li');
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.value = note;
+                const button = document.createElement('button');
+                button.textContent = '修改';
+                button.onclick = async () => {
+                    await fetch('/my_note', {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id, note: input.value })
+                    });
+                    fetchNotes();
+                };
+                li.appendChild(input);
+                li.appendChild(button);
+                notesList.appendChild(li);
+            });
+        }
+
+        async function addNote() {
+            const note = document.getElementById('noteInput').value;
+            if (!note) return;
+            await fetch('/my_note', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ note })
+            });
+            document.getElementById('noteInput').value = '';
+            fetchNotes();
+        }
+
+        fetchNotes();
+    </script>
+</body>
+</html>
