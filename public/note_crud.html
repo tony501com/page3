@@ -11,6 +11,16 @@
             width: 100%; /* 使 textarea 宽度充满容器 */
             height: 100px; /* 增加高度以适应多行输入 */
         }
+        /* 自定义列宽 */
+        th.id-column, td.id-column {
+            width: 10%; /* ID 列宽度 */
+        }
+        th.note-column, td.note-column {
+            width: 70%; /* 笔记列宽度 */
+        }
+        th.action-column, td.action-column {
+            width: 20%; /* 操作列宽度 */
+        }
     </style>
 </head>
 <body>
@@ -24,9 +34,9 @@
         <table class="table table-bordered mt-3">
             <thead class="thead-dark">
                 <tr>
-                    <th>ID</th>
-                    <th>笔记</th>
-                    <th>操作</th>
+                    <th class="id-column">ID</th>
+                    <th class="note-column">笔记</th>
+                    <th class="action-column">操作</th>
                 </tr>
             </thead>
             <tbody id="notesTable"></tbody>
@@ -47,9 +57,9 @@
             notes.forEach(({ id, note }) => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td>${id}</td>
-                    <td><textarea id="note-${id}" class="form-control">${note}</textarea></td>
-                    <td><button class="btn btn-warning" onclick="updateNote(${id})">修改</button></td>
+                    <td class="id-column">${id}</td>
+                    <td class="note-column"><textarea id="note-${id}" class="form-control">${note}</textarea></td>
+                    <td class="action-column"><button class="btn btn-warning" onclick="updateNote(${id})">修改</button></td>
                 `;
                 notesTable.appendChild(tr);
             });
