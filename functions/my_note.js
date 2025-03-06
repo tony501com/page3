@@ -1,28 +1,26 @@
 export default {
-    async fetch(request, env) {
-      const url = new URL(request.url);
-      const { searchParams } = url;
-      
-      if (request.method === "POST") {
-        const { note } = await request.json();
-        await env.DB.prepare("INSERT INTO my_note (note) VALUES (?);").bind(note).run();
-        return new Response(JSON.stringify({ success: true }), { status: 200 });
-      }
-      
-      if (request.method === "PUT") {
-        const id = searchParams.get("id");
-        const { note } = await request.json();
-        await env.DB.prepare("UPDATE my_note SET note = ? WHERE id = ?;").bind(note, id).run();
-        return new Response(JSON.stringify({ success: true }), { status: 200 });
-      }
-      
-      if (request.method === "GET") {
-        const notes = await env.DB.prepare("SELECT * FROM my_note;").all();
-        return new Response(JSON.stringify(notes.results), { status: 200 });
-      }
-      
-      return new Response("Method Not Allowed", { status: 405 });
-    }
-  };
-  
-  
+  async fetch(request, env) {
+    const notes = await env.DB.prepare("SELECT * FROM my_note;").all();
+    
+    const html = `
+      <!DOCTYPE html>
+      <html lang="zh">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>笔记列表</title>
+      </head>
+      <body>
+        <h1>笔记列表</h1>
+        <ul>
+          ${notes.results.map(note => `<li>${note.note}</li>`).join('')}
+        </ul>
+      </body>
+      </html>
+    `;
+    
+    return new Response(html, {
+      headers: { "Content-Type": "text/html" }
+    });
+  }
+};
