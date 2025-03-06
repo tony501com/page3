@@ -25,47 +25,4 @@ export default {
     }
   };
   
-  // 前端代码
-  const app = document.getElementById("app");
-  const noteInput = document.createElement("input");
-  noteInput.placeholder = "输入笔记";
-  const addButton = document.createElement("button");
-  addButton.textContent = "添加笔记";
-  const notesList = document.createElement("ul");
-  
-  addButton.onclick = async () => {
-    const note = noteInput.value;
-    if (!note) return;
-    await fetch("/", { method: "POST", body: JSON.stringify({ note }) });
-    noteInput.value = "";
-    loadNotes();
-  };
-  
-  async function loadNotes() {
-    const res = await fetch("/");
-    const notes = await res.json();
-    notesList.innerHTML = "";
-    notes.forEach(({ id, note }) => {
-      const li = document.createElement("li");
-      const noteText = document.createElement("span");
-      noteText.textContent = note;
-      const editButton = document.createElement("button");
-      editButton.textContent = "编辑";
-      editButton.onclick = async () => {
-        const newNote = prompt("修改笔记", note);
-        if (newNote) {
-          await fetch(`/?id=${id}`, { method: "PUT", body: JSON.stringify({ note: newNote }) });
-          loadNotes();
-        }
-      };
-      li.appendChild(noteText);
-      li.appendChild(editButton);
-      notesList.appendChild(li);
-    });
-  }
-  
-  app.appendChild(noteInput);
-  app.appendChild(addButton);
-  app.appendChild(notesList);
-  loadNotes();
   
