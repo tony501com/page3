@@ -17,7 +17,7 @@ export default {
         </ul>
       </body>
       </html>
-    `;
+    `; 
 
     console.log("Fetching notes from database...");
     console.log(notes);
