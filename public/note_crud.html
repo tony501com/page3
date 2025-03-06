@@ -4,28 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>笔记管理</title>
+    <!-- 引入 Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         textarea {
-            width: 300px; /* 增加宽度 */
-            height: 60px; /* 适应多行输入 */
+            width: 100%; /* 使 textarea 宽度充满容器 */
+            height: 100px; /* 增加高度以适应多行输入 */
         }
     </style>
 </head>
 <body>
-    <h1>笔记列表</h1>
-    <textarea id="noteInput" placeholder="输入笔记"></textarea>
-    <button onclick="addNote()">添加</button>
-    
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>笔记</th>
-                <th>操作</th>
-            </tr>
-        </thead>
-        <tbody id="notesTable"></tbody>
-    </table>
+    <div class="container mt-5">
+        <h1 class="text-center">笔记列表</h1>
+        <div class="form-group">
+            <textarea id="noteInput" class="form-control" placeholder="输入笔记"></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="addNote()">添加</button>
+        
+        <table class="table table-bordered mt-3">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>笔记</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="notesTable"></tbody>
+        </table>
+    </div>
+
+    <!-- 引入 Bootstrap JS 和依赖 -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
         async function fetchNotes() {
@@ -37,8 +48,8 @@
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${id}</td>
-                    <td><textarea id="note-${id}" style="width: 300px; height: 60px;">${note}</textarea></td>
-                    <td><button onclick="updateNote(${id})">修改</button></td>
+                    <td><textarea id="note-${id}" class="form-control">${note}</textarea></td>
+                    <td><button class="btn btn-warning" onclick="updateNote(${id})">修改</button></td>
                 `;
                 notesTable.appendChild(tr);
             });
