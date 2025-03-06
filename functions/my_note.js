@@ -1,7 +1,7 @@
 export default {
   async fetch(request, env) {
     const notes = await env.DB.prepare("SELECT * FROM my_note;").all();
-    
+
     const html = `
       <!DOCTYPE html>
       <html lang="zh">
@@ -18,7 +18,10 @@ export default {
       </body>
       </html>
     `;
-    
+
+    console.log("Fetching notes from database...");
+    console.log(notes);
+
     return new Response(html, {
       headers: { "Content-Type": "text/html" }
     });
