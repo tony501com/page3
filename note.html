@@ -3,6 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cloudflare Pages Note</title>
+  </head>
+  <body>
+    <h1>欢迎来到 Notes</h1>
+    
+    <div id="app"></div>
     <script>
       // 前端代码
       const app = document.getElementById("app");
@@ -51,16 +57,5 @@
       app.appendChild(notesList);
       loadNotes();
     </script>
-
-    <title>Cloudflare Pages Note</title>
-  </head>
-  <body>
-    <h1>欢迎来到 Notes</h1>
-    <p>点击以下链接访问 API：</p>
-    <ul>
-      <li><a href="/api">访问 /api</a></li>
-      <li><a href="/hello">访问 /hello</a></li>
-    </ul>
-    <div id="app"></div>
   </body>
 </html>
