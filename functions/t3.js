@@ -16,8 +16,9 @@ export async function onRequestGet(context) {
     const response2 = await fetch(fullUrl);
     const html2 = await response2.text();
 
+
     // 返回提取的href内容
-    return new Response(html2, {
+    return new Response(fullUrl + html2, {
       headers: { 'Content-Type': 'text/plain' },
     });  } catch (error) {
     // 处理错误
