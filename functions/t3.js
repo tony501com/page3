@@ -1,28 +1,26 @@
 import { load } from 'cheerio';
 
-export async function onRequest(context) {
-    // 示例 HTML 内容
-    const html = `
-        <div class="xcblog-v2ray-box">
-            <p>https://node.freeclashnode.com/uploads/2025/03/0-20250303.txt</p>
-            <p>https://node.freeclashnode.com/uploads/2025/03/1-20250303.txt</p>
-            <p>https://node.freeclashnode.com/uploads/2025/03/2-20250303.txt</p>
-            <p>https://node.freeclashnode.com/uploads/2025/03/3-20250303.txt</p>
-            <p>https://node.freeclashnode.com/uploads/2025/03/4-20250303.txt</p>
-        </div>
-    `;
+export async function onRequestGet(context) {
+  try {
+    // 使用 fetch API 获取百度首页的 HTML 内容
+    const response = await fetch('https://www.baidu.com');
+    const html = await response.text();
 
     // 使用 cheerio 加载 HTML
-    const $ = load(html);
+    const $ = cheerio.load(html);
 
-    // 提取所有 <p> 标签的内容
-    const pContents = [];
-    $('div.xcblog-v2ray-box p').each((index, element) => {
-        pContents.push($(element).text());
-    });
+    // 提取 <title> 标签的内容
+    const title = $('title').text();
 
-    // 返回解析结果
-    return new Response(JSON.stringify({ pContents }), {
-        headers: { 'Content-Type': 'application/json' },
+    // 返回提取的 title 内容
+    return new Response(`Title: ${title}`, {
+      headers: { 'Content-Type': 'text/plain' },
     });
+  } catch (error) {
+    // 处理错误
+    return new Response(`Error: ${error.message}`, {
+      status: 500,
+      headers: { 'Content-Type': 'text/plain' },
+    });
+  }
 }
