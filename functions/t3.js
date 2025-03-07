@@ -1,4 +1,4 @@
-const cheerio = require('cheerio');
+import { load } from 'cheerio';
 
 // 假设这是你的 HTML 字符串
 const html = `
