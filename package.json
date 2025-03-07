@@ -1,0 +1,26 @@
+{
+  "name": "page3",
+  "version": "1.0.0",
+  "description": "\"# Page3 Project\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tony501com/page3.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tony501com/page3/issues"
+  },
+  "homepage": "https://github.com/tony501com/page3#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0"
+  }
+  {
+    "type": "module"
+  }
+}
