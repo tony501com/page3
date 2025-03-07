@@ -13,14 +13,12 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/tony501com/page3/issues"
   },
   "homepage": "https://github.com/tony501com/page3#readme",
   "dependencies": {
     "cheerio": "^1.0.0"
-  }
-  {
-    "type": "module"
   }
 }
