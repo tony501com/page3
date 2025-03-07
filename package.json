@@ -2,7 +2,7 @@
   "name": "page3",
   "version": "1.0.0",
   "description": "\"# Page3 Project\"",
-  "main": "index.html",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
