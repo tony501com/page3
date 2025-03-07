@@ -1,4 +1,4 @@
-import cheerio from 'cheerio';
+import * as cheerio from 'cheerio';
 
 export async function onRequest(context) {
   const htmlString = `<div><h1>Hello, World!</h1><p>This is a paragraph.</p></div>`;
