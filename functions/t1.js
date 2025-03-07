@@ -7,7 +7,7 @@ export async function onRequest(context) {
   // 使用类似 jQuery 的语法操作 DOM
   const h1Text = $('h1').text();
   const pText = $('p').text();
-
+  console.log(`h1: ${h1Text}, p: ${pText}`);
   return new Response(`h1: ${h1Text}, p: ${pText}`, {
     headers: { 'Content-Type': 'text/plain' },
   });
