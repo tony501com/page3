@@ -18,7 +18,7 @@ export async function onRequest(context) {
     const filteredParagraphs = paragraphs.filter(content => content.endsWith('.txt'));
 
     // 返回结果
-    return new Response(JSON.stringify(filteredParagraphs), {
+    return new Response(JSON.stringify(filteredParagraphs[0]), {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
