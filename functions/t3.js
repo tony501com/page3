@@ -15,7 +15,7 @@ export async function onRequestGet(context) {
     const fullUrl = `https://freeclashx.github.io${firstHref}`;
     const response2 = await fetch(fullUrl);
     const html2 = await response2.text();
-    const tag = cheerio.load(html);
+    const tag = cheerio.load(html2);
 
 
     // 返回提取的href内容
