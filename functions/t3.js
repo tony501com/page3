@@ -11,9 +11,13 @@ export async function onRequestGet(context) {
   
     // 提取第一个 class="xcblog-blog-url" 的 href
     const firstHref = $('.xcblog-blog-url').first().attr('href');
-  
+    // tt= 'https://freeclashx.github.io' + firstHref
+    const fullUrl = `https://freeclashx.github.io${firstHref}`;
+    const response2 = await fetch(fullUrl);
+    const html2 = await response2.text();
+
     // 返回提取的href内容
-    return new Response(`First href: ${firstHref}`, {
+    return new Response(html2, {
       headers: { 'Content-Type': 'text/plain' },
     });  } catch (error) {
     // 处理错误
