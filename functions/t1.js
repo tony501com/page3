@@ -1,14 +1,20 @@
-import * as cheerio from 'cheerio';
-
 export async function onRequest(context) {
-  const htmlString = `<div><h1>Hello, World!</h1><p>This is a paragraph.</p></div>`;
-  const $ = cheerio.load(htmlString);
- 
-  // 使用类似 jQuery 的语法操作 DOM
-  const h1Text = $('h1').text();
-  const pText = $('p').text();
-  console.log(`h1: ${h1Text}, p: ${pText}`);
-  return new Response(`h1: ${h1Text}, p: ${pText}`, {
-    headers: { 'Content-Type': 'text/plain' },
-  });
+  try {
+    const response = await fetch('https://freeclashx.github.io/', {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36',
+      },
+    });
+
+    const html = await response.text();
+
+    return new Response(JSON.stringify(html), {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (error) {
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
 }

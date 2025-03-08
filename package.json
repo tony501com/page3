@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/tony501com/page3#readme",
   "dependencies": {
-    "cheerio": "^1.0.0"
+    "cheerio": "^1.0.0",
+    "undici": "^7.4.0"
   }
 }
