@@ -1,6 +1,6 @@
 import * as cheerio from 'cheerio';
 
-/ 判断字符串是否为有效的 Base64
+//  判断字符串是否为有效的 Base64
 function isBase64(str) {
   try {
     // 尝试将字符串从 Base64 解码
