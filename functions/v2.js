@@ -15,7 +15,7 @@ export async function onRequest(context) {
   const fullUrl = 'https://freeclashx.github.io' + firstHref;
   try {
     // 获取网页内容
-    const response = await fetch('https://example.com'); // 替换为你要抓取的网页URL
+    const response = await fetch(fullUrl); // 替换为你要抓取的网页URL
     const html = await response.text();
 
     // 使用 Cheerio 加载 HTML
