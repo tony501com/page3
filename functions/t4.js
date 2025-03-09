@@ -18,9 +18,6 @@ export async function onRequest(context) {
     // 过滤出以 .txt 结尾的内容
     const filteredParagraphs = paragraphs.filter(content => content.endsWith('.txt'));
 
-    // 返回结果
-    // on/json' },
-    });
   } catch (error) {
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
