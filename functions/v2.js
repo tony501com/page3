@@ -1,21 +1,19 @@
 import * as cheerio from 'cheerio';
 
-export async function onRequest(context) {
-  const { request } = context;
-
-  // 获取HTML内容
-  const response = await fetch('https://freeclashx.github.io/'); // 替换https://freeclashx.github.io/
-  const html = await response.text();
-
-  // 使用Cheerio加载HTML
-  const $ = cheerio.load(html);
-
-  // 提取第一个 class="xcblog-blog-url" 的 href
-  const firstHref = $('.xcblog-blog-url').first().attr('href');
-  const fullUrl = 'https://freeclashx.github.io' + firstHref;
+/ 判断字符串是否为有效的 Base64
+function isBase64(str) {
   try {
-    // 获取网页内容
-    const response = await fetch(fullUrl); // 替换为你要抓取的网页URL
+    // 尝试将字符串从 Base64 解码
+    return Buffer.from(str, 'base64').toString('base64') === str;
+  } catch (error) {
+    return false;
+  }
+}
+
+export async function onRequest(context) {
+  try {
+    // 获取初始网页内容
+    const response = await fetch('https://example.com'); // 替换为你要抓取的网页URL
     const html = await response.text();
 
     // 使用 Cheerio 加载 HTML
@@ -39,7 +37,10 @@ export async function onRequest(context) {
 
           // 使用 Cheerio 提取网页的文本内容
           const page$ = cheerio.load(pageHtml);
-          return page$('body').text().trim(); // 提取整个 <body> 的文本内容并去除空白字符
+          const text = page$('body').text().trim(); // 提取整个 <body> 的文本内容并去除空白字符
+
+          // 判断文本是否为非 Base64 字符串，如果是则转换为 Base64
+          return isBase64(text) ? text : Buffer.from(text).toString('base64');
         } catch (error) {
           console.error(`Failed to fetch ${url}:`, error.message);
           return ''; // 如果抓取失败，返回空字符串
@@ -47,8 +48,8 @@ export async function onRequest(context) {
       })
     );
 
-    // 将所有文本内容拼接成一个字符串
-    const combinedText = allTexts.join(''); // 用两个换行符分隔每个网页的内容
+    // 将所有 Base64 编码的文本内容拼接成一个字符串
+    const combinedText = allTexts.join('\n\n'); // 用两个换行符分隔每个网页的内容
 
     // 返回拼接后的文本内容
     return new Response(combinedText, {
