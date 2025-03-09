@@ -11,9 +11,21 @@ function isBase64(str) {
 }
 
 export async function onRequest(context) {
+  const { request } = context;
+
+  // 获取HTML内容
+  const response = await fetch('https://freeclashx.github.io/'); // 替换https://freeclashx.github.io/
+  const html = await response.text();
+
+  // 使用Cheerio加载HTML
+  const $ = cheerio.load(html);
+
+  // 提取第一个 class="xcblog-blog-url" 的 href
+  const firstHref = $('.xcblog-blog-url').first().attr('href');
+  const fullUrl = 'https://freeclashx.github.io' + firstHref;
   try {
-    // 获取初始网页内容
-    const response = await fetch('https://example.com'); // 替换为你要抓取的网页URL
+    // 获取网页内容
+    const response = await fetch(fullUrl); // 替换为你要抓取的网页URL
     const html = await response.text();
 
     // 使用 Cheerio 加载 HTML
