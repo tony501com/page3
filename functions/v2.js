@@ -61,7 +61,7 @@ export async function onRequest(context) {
     );
 
     // 将所有 Base64 编码的文本内容拼接成一个字符串
-    const combinedText = allTexts.join('\n\n'); // 用两个换行符分隔每个网页的内容
+    const combinedText = allTexts.join(''); // 用两个换行符分隔每个网页的内容
 
     // 返回拼接后的文本内容
     return new Response(combinedText, {
