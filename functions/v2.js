@@ -58,7 +58,7 @@ export async function onRequest(context) {
           const text = page$('body').text().trim(); // 提取整个 <body> 的文本内容并去除空白字符
 
           // 判断文本是否为 Base64 字符串，如果是则解码为普通文本
-          return isBase64(text) ? Buffer.from(text, 'base64').toString('utf-8') : text;
+          return (text) ;
         } catch (error) {
           console.error(`Failed to fetch ${url}:`, error.message);
           return ''; // 如果抓取失败，返回空字符串
@@ -70,13 +70,13 @@ export async function onRequest(context) {
 
     // 转换并拼接结果
     const result = convertToSecondFormat(allTexts);
-    console.log(result);
+    // console.log(result);
 
     combinedText = result
 
 
     // 返回拼接后的文本内容
-    return new Response(combinedText, {
+    return new Response(allTexts, {
       headers: { 'Content-Type': 'text/plain' },
     });
   } catch (error) {
