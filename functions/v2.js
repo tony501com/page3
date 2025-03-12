@@ -57,7 +57,6 @@ export async function onRequest(context) {
           const page$ = cheerio.load(pageHtml);
           const text = page$('body').text().trim(); // 提取整个 <body> 的文本内容并去除空白字符
 
-          // 判断文本是否为 Base64 字符串，如果是则解码为普通文本
           text = convertToSecondFormat(text);
 
           return (text) ;
@@ -78,7 +77,7 @@ export async function onRequest(context) {
 
 
     // 返回拼接后的文本内容
-    return new Response(allTexts, {
+    return new Response(result, {
       headers: { 'Content-Type': 'text/plain' },
     });
   } catch (error) {
