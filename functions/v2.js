@@ -68,11 +68,11 @@ export async function onRequest(context) {
 
 
 
-    // 转换并拼接结果
-    const result = convertToSecondFormat(allTexts);
-    // console.log(result);
+    // // 转换并拼接结果
+    // const result = convertToSecondFormat(allTexts);
+    // // console.log(result);
 
-    combinedText = result
+    // combinedText = result
 
 
     // 返回拼接后的文本内容
