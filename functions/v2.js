@@ -9,6 +9,13 @@ function isBase64(str) {
     return false;
   }
 }
+function convertToSecondFormat(allTexts) {
+  return allTexts.map(text => {
+    const base64 = Buffer.from(text).toString('base64');
+    return base64;
+  }).join('\n');
+}
+
 export async function onRequest(context) {
   const { request } = context;
 
@@ -35,41 +42,47 @@ export async function onRequest(context) {
       .map((i, el) => $(el).text())
       .get();
 
-   // 过滤出以 .txt 结尾的内容（假设这些是 URL）
-   const filteredParagraphs = paragraphs.filter(content => content.endsWith('.txt'));
+    // 过滤出以 .txt 结尾的内容（假设这些是 URL）
+    const filteredParagraphs = paragraphs.filter(content => content.endsWith('.txt'));
 
-   // 遍历每个 URL，读取网页并提取文本内容
-   const allTexts = await Promise.all(
-     filteredParagraphs.map(async url => {
-       try {
-         // 获取 URL 的网页内容
-         const pageResponse = await fetch(url);
-         const pageHtml = await pageResponse.text();
+    // 遍历每个 URL，读取网页并提取文本内容
+    const allTexts = await Promise.all(
+      filteredParagraphs.map(async url => {
+        try {
+          // 获取 URL 的网页内容
+          const pageResponse = await fetch(url);
+          const pageHtml = await pageResponse.text();
 
-         // 使用 Cheerio 提取网页的文本内容
-         const page$ = cheerio.load(pageHtml);
-         const text = page$('body').text().trim(); // 提取整个 <body> 的文本内容并去除空白字符
+          // 使用 Cheerio 提取网页的文本内容
+          const page$ = cheerio.load(pageHtml);
+          const text = page$('body').text().trim(); // 提取整个 <body> 的文本内容并去除空白字符
 
-         // 判断文本是否为 Base64 字符串，如果是则解码为普通文本
-         return isBase64(text) ? Buffer.from(text, 'base64').toString('utf-8') : text;
-       } catch (error) {
-         console.error(`Failed to fetch ${url}:`, error.message);
-         return ''; // 如果抓取失败，返回空字符串
-       }
-     })
-   );
+          // 判断文本是否为 Base64 字符串，如果是则解码为普通文本
+          return isBase64(text) ? Buffer.from(text, 'base64').toString('utf-8') : text;
+        } catch (error) {
+          console.error(`Failed to fetch ${url}:`, error.message);
+          return ''; // 如果抓取失败，返回空字符串
+        }
+      })
+    );
 
-   // 将所有文本内容拼接成一个字符串
-   const combinedText = allTexts.join('\n\n'); // 用两个换行符分隔每个网页的内容
 
-   // 返回拼接后的文本内容
-   return new Response(combinedText, {
-     headers: { 'Content-Type': 'text/plain' },
-   });
- } catch (error) {
-   return new Response(`Error: ${error.message}`, {
-     status: 500,
-     headers: { 'Content-Type': 'text/plain' },
-   });
- }
+
+    // 转换并拼接结果
+    const result = convertToSecondFormat(allTexts);
+    console.log(result);
+
+    combinedText = result
+
+
+    // 返回拼接后的文本内容
+    return new Response(combinedText, {
+      headers: { 'Content-Type': 'text/plain' },
+    });
+  } catch (error) {
+    return new Response(`Error: ${error.message}`, {
+      status: 500,
+      headers: { 'Content-Type': 'text/plain' },
+    });
+  }
 }
