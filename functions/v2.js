@@ -62,7 +62,7 @@ export async function onRequest(context) {
 
     // 过滤出以 .txt 结尾的内容（假设这些是 URL）
     const filteredParagraphs = paragraphs.filter(content => content.endsWith('.txt'));
-
+    str_list = ''
     // 遍历每个 URL，读取网页并提取文本内容
     loadWebContents(filteredParagraphs)
     .then(str_list => {
