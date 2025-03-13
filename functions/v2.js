@@ -12,6 +12,7 @@ function isBase64(str) {
 function decodeBase64(str) {
   return atob(str);
 }
+
 async function fetchWebContent(url) {
   const response = await fetch(url);
   if (!response.ok) {
@@ -34,6 +35,7 @@ async function loadWebContents(filteredParagraphs) {
 
   return str_list;
 }
+
 export async function onRequest(context) {
   const { request } = context;
 
@@ -47,6 +49,7 @@ export async function onRequest(context) {
   // 提取第一个 class="xcblog-blog-url" 的 href
   const firstHref = $('.xcblog-blog-url').first().attr('href');
   const fullUrl = 'https://freeclashx.github.io' + firstHref;
+
   try {
     // 获取网页内容
     const response = await fetch(fullUrl); // 替换为你要抓取的网页URL
@@ -62,19 +65,18 @@ export async function onRequest(context) {
 
     // 过滤出以 .txt 结尾的内容（假设这些是 URL）
     const filteredParagraphs = paragraphs.filter(content => content.endsWith('.txt'));
-    str_list = ''
+
     // 遍历每个 URL，读取网页并提取文本内容
-    loadWebContents(filteredParagraphs)
-    .then(str_list => {
-      console.log('Fetched content:', str_list);
-    })
-    .catch(error => {
-      console.error('Error loading web contents:', error);
-    });
+    const str_list = await loadWebContents(filteredParagraphs);
 
+    // 将所有字符串用换行符连接成一个字符串
+    const combinedStr = str_list.join('\n');
 
-    // 返回拼接后的文本内容
-    return new Response(str_list, {
+    // 对拼接后的字符串进行Base64编码
+    const encodedResult = btoa(combinedStr);
+
+    // 返回编码后的文本内容
+    return new Response(encodedResult, {
       headers: { 'Content-Type': 'text/plain' },
     });
   } catch (error) {
