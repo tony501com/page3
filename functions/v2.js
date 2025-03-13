@@ -27,7 +27,11 @@ async function loadWebContents(filteredParagraphs) {
   for (const url of filteredParagraphs) {
     try {
       const content = await fetchWebContent(url);
-      str_list.push(content);
+      if (isBase64(content)) {
+        str_list.push(decodeBase64(content).trim());
+      } else {
+        str_list.push(content.trim());
+      }
     } catch (error) {
       console.error(error);
     }
@@ -66,17 +70,17 @@ export async function onRequest(context) {
     // 过滤出以 .txt 结尾的内容（假设这些是 URL）
     const filteredParagraphs = paragraphs.filter(content => content.endsWith('.txt'));
 
-    // // 遍历每个 URL，读取网页并提取文本内容
-    // const str_list = await loadWebContents(filteredParagraphs);
+    // 遍历每个 URL，读取网页并提取文本内容
+    const str_list = await loadWebContents(filteredParagraphs);
 
-    // // 将所有字符串用换行符连接成一个字符串
-    // const combinedStr = str_list.join('\n');
+    // 将所有字符串用换行符连接成一个字符串
+    const combinedStr = str_list.join('\n');
 
-    // // 对拼接后的字符串进行Base64编码
-    // const encodedResult = btoa(combinedStr);
+    // 对拼接后的字符串进行Base64编码
+    const encodedResult = btoa(combinedStr);
 
     // 返回编码后的文本内容
-    return new Response(filteredParagraphs, {
+    return new Response(encodedResult, {
       headers: { 'Content-Type': 'text/plain' },
     });
   } catch (error) {
