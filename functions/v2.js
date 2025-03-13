@@ -3,19 +3,37 @@ import * as cheerio from 'cheerio';
 // 判断字符串是否为有效的 Base64
 function isBase64(str) {
   try {
-    // 尝试将字符串从 Base64 解码
-    return Buffer.from(str, 'base64').toString('base64') === str;
-  } catch (error) {
+    return btoa(atob(str)) === str;
+  } catch (err) {
     return false;
   }
 }
-function convertToSecondFormat(allTexts) {
-  return allTexts.map(text => {
-    const base64 = Buffer.from(text).toString('base64');
-    return base64;
-  }).join('\n');
+
+function decodeBase64(str) {
+  return atob(str);
+}
+async function fetchWebContent(url) {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch ${url}: ${response.statusText}`);
+  }
+  return response.text();
 }
 
+async function loadWebContents(filteredParagraphs) {
+  const str_list = [];
+
+  for (const url of filteredParagraphs) {
+    try {
+      const content = await fetchWebContent(url);
+      str_list.push(content);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  return str_list;
+}
 export async function onRequest(context) {
   const { request } = context;
 
@@ -46,38 +64,17 @@ export async function onRequest(context) {
     const filteredParagraphs = paragraphs.filter(content => content.endsWith('.txt'));
 
     // 遍历每个 URL，读取网页并提取文本内容
-    const allTexts = await Promise.all(
-      filteredParagraphs.map(async url => {
-        try {
-          // 获取 URL 的网页内容
-          const pageResponse = await fetch(url);
-          const pageHtml = await pageResponse.text();
-
-          // 使用 Cheerio 提取网页的文本内容
-          const page$ = cheerio.load(pageHtml);
-          const text = page$('body').text().trim(); // 提取整个 <body> 的文本内容并去除空白字符
-
-          text = convertToSecondFormat(text);
-
-          return (text) ;
-        } catch (error) {
-          console.error(`Failed to fetch ${url}:`, error.message);
-          return ''; // 如果抓取失败，返回空字符串
-        }
-      })
-    );
-
-
-
-    // 转换并拼接结果
-    const result = convertToSecondFormat(allTexts);
-    // console.log(result);
-
-    // combinedText = result
+    loadWebContents(filteredParagraphs)
+    .then(str_list => {
+      console.log('Fetched content:', str_list);
+    })
+    .catch(error => {
+      console.error('Error loading web contents:', error);
+    });
 
 
     // 返回拼接后的文本内容
-    return new Response(result, {
+    return new Response(str_list, {
       headers: { 'Content-Type': 'text/plain' },
     });
   } catch (error) {
