@@ -44,7 +44,7 @@ export async function onRequest(context) {
   const { request } = context;
 
   // 获取HTML内容
-  const response = await fetch('https://freeclashx.github.io/'); // 替换https://freeclashx.github.io/
+  const response = await fetch('https://freeclashx.github.io/'); // freeclashx.github.io
   const html = await response.text();
 
   // 使用Cheerio加载HTML
