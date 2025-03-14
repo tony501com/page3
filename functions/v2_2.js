@@ -28,8 +28,10 @@ export async function onRequest(context) {
     const subscriptionHeader = $('h3:contains("订阅链接")');
     const subscriptionParagraph = subscriptionHeader.nextAll('p').eq(1).text();
 
-    // 返回编码后的文本内容
-    return new Response(subscriptionParagraph, {
+    // 提取 subscriptionParagraph 中，开始为http的全部内容
+    const httpLink = subscriptionParagraph.match(/http[^\s]+/)[0];
+
+    return new Response(httpLink, {
       headers: { 'Content-Type': 'text/plain' },
     });
   } catch (error) {
