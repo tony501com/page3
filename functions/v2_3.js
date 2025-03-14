@@ -82,7 +82,7 @@ export async function onRequest(context) {
     const encodedResult = btoa(combinedStr);
 
     // 返回编码后的文本内容
-    return new Response(encodedResult, {
+    return new Response(html, {
       headers: { 'Content-Type': 'text/plain' },
     });
   } catch (error) {
