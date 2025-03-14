@@ -1,7 +1,7 @@
 import * as cheerio from 'cheerio';
 
 // 判断字符串是否为有效的 Base64
-function isBase64(str: string): boolean {
+function isBase64(str) {
   try {
     return btoa(atob(str)) === str;
   } catch (err) {
@@ -9,11 +9,11 @@ function isBase64(str: string): boolean {
   }
 }
 
-function decodeBase64(str: string): string {
+function decodeBase64(str) {
   return atob(str);
 }
 
-async function fetchWebContent(url: string): Promise<string> {
+async function fetchWebContent(url) {
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error(`Failed to fetch ${url}: ${response.statusText}`);
@@ -21,8 +21,8 @@ async function fetchWebContent(url: string): Promise<string> {
   return response.text();
 }
 
-async function loadWebContents(filteredParagraphs: string[]): Promise<string[]> {
-  const str_list: string[] = [];
+async function loadWebContents(filteredParagraphs) {
+  const str_list = [];
 
   for (const url of filteredParagraphs) {
     try {
@@ -40,7 +40,7 @@ async function loadWebContents(filteredParagraphs: string[]): Promise<string[]> 
   return str_list;
 }
 
-export async function onRequest(context: any): Promise<Response> {
+export async function onRequest(context) {
   const { request } = context;
 
   // 获取HTML内容
@@ -68,6 +68,9 @@ export async function onRequest(context: any): Promise<Response> {
     const paragraphs = $('div.xcblog-v2ray-box p')
       .map((i, el) => $(el).text())
       .get();
+
+    // 过滤出以 .txt 结尾的内容（假设这些是 URL）
+    const filteredParagraphs = paragraphs.filter(content => content.endsWith('.txt'));
 
     // 遍历每个 URL，读取网页并提取文本内容
     const str_list = await loadWebContents(filteredParagraphs);
