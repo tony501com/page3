@@ -18,7 +18,7 @@ export async function onRequest(context) {
 
   try {
     // 获取网页内容
-    const response = await fetch(link); 
+    const response = await fetch(link);
     const html = await response.text();
 
     // 使用 Cheerio 加载 HTML
@@ -32,8 +32,11 @@ export async function onRequest(context) {
     const httpLink = subscriptionParagraph.match(/http[^\s]+/)[0];
     const response2 = await fetch(httpLink);
     const html2 = await response2.text();
-  
-    return new Response(html2, {
+
+    // 对拼接后的字符串进行Base64编码
+    const encodedResult = btoa(html2);
+
+    return new Response(encodedResult, {
       headers: { 'Content-Type': 'text/plain' },
     });
   } catch (error) {
