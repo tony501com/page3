@@ -30,8 +30,10 @@ export async function onRequest(context) {
 
     // 提取 subscriptionParagraph 中，开始为http的全部内容
     const httpLink = subscriptionParagraph.match(/http[^\s]+/)[0];
-
-    return new Response(httpLink, {
+    const response2 = await fetch(httpLink);
+    const html2 = await response2.text();
+  
+    return new Response(html2, {
       headers: { 'Content-Type': 'text/plain' },
     });
   } catch (error) {
