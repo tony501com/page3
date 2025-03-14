@@ -8,7 +8,7 @@ function isBase64(str) {
     return false;
   }
 }
-
+   
 function decodeBase64(str) {
   return atob(str);
 }
@@ -69,11 +69,8 @@ export async function onRequest(context) {
       .map((i, el) => $(el).text())
       .get();
 
-    // 过滤出以 .txt 结尾的内容（假设这些是 URL）
-    const filteredParagraphs = paragraphs.filter(content => content.endsWith('.txt'));
-
     // 遍历每个 URL，读取网页并提取文本内容
-    const str_list = await loadWebContents(filteredParagraphs);
+    const str_list = await loadWebContents(paragraphs);
 
     // 将所有字符串用换行符连接成一个字符串
     const combinedStr = str_list.join('\n');
