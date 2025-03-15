@@ -42,7 +42,7 @@ async function loadWebContents(filteredParagraphs) {
 
 export async function onRequest(context) {
   const { request } = context;
-
+  console.log('Starting script...');
   // 获取HTML内容
   let response = await fetch('https://mianfeiclash.github.io/');
   let html = await response.text();
@@ -68,7 +68,7 @@ export async function onRequest(context) {
     const paragraphs = $('div.xcblog-v2ray-box p')
       .map((i, el) => $(el).text())
       .get();
-
+console.log('paragraphs')
     // // 过滤出以 .txt 结尾的内容（假设这些是 URL）
     // const filteredParagraphs = paragraphs.filter(content => content.endsWith('.txt'));
 
