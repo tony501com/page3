@@ -1,6 +1,6 @@
 export async function onRequest(context) {
   try {
-    const response = await fetch('https://node.freeclashnode.com/uploads/2025/03/3-20250314.txt', {
+    const response = await fetch('https://work1.tttwww502.workers.dev/fetch2?url=https://www.baidu.com', {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
