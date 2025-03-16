@@ -42,38 +42,24 @@ async function loadWebContents(filteredParagraphs) {
 
 export async function onRequest(context) {
   const { request } = context;
-  console.log('Starting script...');
-  // 获取HTML内容
-  let response = await fetch('https://mianfeiclash.github.io/');
-  let html = await response.text();
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}${month}${day}`;
+  };
 
-  // 使用Cheerio加载HTML
-  let $ = cheerio.load(html);
+  const today = new Date();
+  const formattedDate = formatDate(today);
 
-  // 找第一个 <div class="row item xcblog-blog-item" >
-  const blogItem = $('.row.item.xcblog-blog-item').first();
-  // 找第一个<a href=... >
-  const firstHref = blogItem.find('a').first().attr('href');
-  const fullUrl = `https://mianfeiclash.github.io${firstHref}`;
-
+  const url_list = [];
+  for (let i = 0; i <= 5; i++) {
+    url_list.push(`https://node.freeclashnode.com/uploads/${formattedDate.yyyy}/${formattedDate.mm}/${i}-${formattedDate.yyyymmdd}.txt`);
+  }
   try {
-    // 获取网页内容
-    response = await fetch(fullUrl);
-    html = await response.text();
-
-    // 使用 Cheerio 加载 HTML
-    $ = cheerio.load(html);
-
-    // 提取 <div class="xcblog-v2ray-box"> 里面的所有 <p> 标签内容
-    const paragraphs = $('div.xcblog-v2ray-box p')
-      .map((i, el) => $(el).text())
-      .get();
-console.log('paragraphs')
-    // // 过滤出以 .txt 结尾的内容（假设这些是 URL）
-    // const filteredParagraphs = paragraphs.filter(content => content.endsWith('.txt'));
 
     // 遍历每个 URL，读取网页并提取文本内容
-    const str_list = await loadWebContents(paragraphs);
+    const str_list = await loadWebContents(url_list);
 
     // 将所有字符串用换行符连接成一个字符串
     const combinedStr = str_list.join('\n');
